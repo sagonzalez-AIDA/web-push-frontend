@@ -6,7 +6,7 @@ if ("serviceWorker" in navigator) {
 }
 
 document.getElementById("notifyButton").addEventListener("click", () => {
-  fetch("http://localhost:5000/trigger-notification", {
+  fetch("https://web-push-service-troj.onrender.com/trigger-notification", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -34,7 +34,7 @@ async function send() {
     applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
   });
 
-  await fetch("http://localhost:5000/subscribe", {
+  await fetch("https://web-push-service-troj.onrender.com/subscribe", {
     method: "POST",
     body: JSON.stringify(subscription),
     headers: {
