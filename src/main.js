@@ -1,8 +1,12 @@
 const publicVapidKey = import.meta.env.VITE_PUBLIC_VAPID_KEY;
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
+let suscription;
+
 if ("serviceWorker" in navigator) {
   send().catch((err) => console.error(err));
+  const registration = await navigator.serviceWorker.ready;
+  suscription = await registration.pushManager.getSubscription();
 }
 
 document.getElementById("notifyButton").addEventListener("click", () => {
@@ -22,6 +26,30 @@ document.getElementById("notifyButton").addEventListener("click", () => {
     .catch((error) => {
       console.error("Error al enviar la solicitud:", error);
     });
+});
+
+document.getElementById("unsubscribeButton").addEventListener("click", async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+
+      if (subscription) {
+        await subscription.unsubscribe();
+
+        await fetch(`${backendUrl}/unsubscribe`, {
+          method: 'POST',
+          body: JSON.stringify(subscription),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log('Usuario desuscrito correctamente.');
+      }
+    } catch (error) {
+      console.error('Error al desuscribir al usuario:', error);
+    }
+  }
 });
 
 async function send() {
