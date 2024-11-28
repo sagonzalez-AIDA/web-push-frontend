@@ -1,12 +1,8 @@
 const publicVapidKey = import.meta.env.VITE_PUBLIC_VAPID_KEY;
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-let suscription;
-
 if ("serviceWorker" in navigator) {
   send().catch((err) => console.error(err));
-  const registration = await navigator.serviceWorker.ready;
-  suscription = await registration.pushManager.getSubscription();
 }
 
 document.getElementById("notifyButton").addEventListener("click", () => {
