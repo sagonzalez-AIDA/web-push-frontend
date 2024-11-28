@@ -1,12 +1,12 @@
-const publicVapidKey =
-  "BEzj8tUfMx0zIfsx9l2PzdO_-5AaLh05sNetBMOrszhFtMbMRb26a2_XAMSaLoEht12lwKULYGuyV5ti4INEYfA";
+const publicVapidKey = import.meta.env.VITE_PUBLIC_VAPID_KEY;
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 if ("serviceWorker" in navigator) {
   send().catch((err) => console.error(err));
 }
 
 document.getElementById("notifyButton").addEventListener("click", () => {
-  fetch("https://web-push-service-troj.onrender.com/trigger-notification", {
+  fetch(`${backendUrl}/trigger-notification`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -34,7 +34,7 @@ async function send() {
     applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
   });
 
-  await fetch("https://web-push-service-troj.onrender.com/subscribe", {
+  await fetch(`${backendUrl}/subscribe`, {
     method: "POST",
     body: JSON.stringify(subscription),
     headers: {
